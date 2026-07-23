@@ -26,7 +26,8 @@ def extract_details(tree):
                 imports.append(item.name)
 
         elif isinstance(node, ast.ImportFrom):
-            imports.append(node.module)
+            if node.module:
+                imports.append(node.module)
 
     print("Functions:", functions)
     print("Classes:", classes)
@@ -51,10 +52,14 @@ def calculate_metrics(tree):
         elif isinstance(node, ast.ImportFrom):
             imports += 1
 
-    print("Code Metrics:")
+    with open("sample.py", "r") as file:
+        total_lines = len(file.readlines())
+
+    print("\nCode Metrics:")
     print("Functions:", functions)
     print("Classes:", classes)
     print("Imports:", imports)
+    print("Total Lines:", total_lines)
 
 
 tree = parse_python_file("sample.py")
