@@ -33,10 +33,32 @@ def extract_details(tree):
     print("Imports:", imports)
 
 
-print("Tree created")
+def calculate_metrics(tree):
+    functions = 0
+    classes = 0
+    imports = 0
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef):
+            functions += 1
+
+        elif isinstance(node, ast.ClassDef):
+            classes += 1
+
+        elif isinstance(node, ast.Import):
+            imports += 1
+
+        elif isinstance(node, ast.ImportFrom):
+            imports += 1
+
+    print("Code Metrics:")
+    print("Functions:", functions)
+    print("Classes:", classes)
+    print("Imports:", imports)
+
 
 tree = parse_python_file("sample.py")
 
-print("Calling extractor")
-
 extract_details(tree)
+
+calculate_metrics(tree)
