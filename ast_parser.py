@@ -11,6 +11,7 @@ def parse_python_file(file_path):
 
 def extract_details(tree):
     functions = []
+    function_args = {}
     classes = []
     imports = []
     variables = []
@@ -18,6 +19,10 @@ def extract_details(tree):
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
             functions.append(node.name)
+            function_args[node.name] = []
+
+            for arg in node.args.args:
+                function_args[node.name].append(arg.arg)
 
         elif isinstance(node, ast.ClassDef):
             classes.append(node.name)
@@ -39,6 +44,7 @@ def extract_details(tree):
     print("Classes:", classes)
     print("Imports:", imports)
     print("Variables:", variables)
+    print("Function Arguments:", function_args)
 
 
 def calculate_metrics(tree):
@@ -62,7 +68,7 @@ def calculate_metrics(tree):
     with open("sample.py", "r") as file:
         total_lines = len(file.readlines())
 
-    print("code Metrics:")
+    print("\nCode Metrics:")
     print("Functions:", functions)
     print("Classes:", classes)
     print("Imports:", imports)
