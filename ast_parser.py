@@ -13,6 +13,7 @@ def extract_details(tree):
     functions = []
     classes = []
     imports = []
+    variables = []
 
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
@@ -29,9 +30,15 @@ def extract_details(tree):
             if node.module:
                 imports.append(node.module)
 
+        elif isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    variables.append(target.id)
+
     print("Functions:", functions)
     print("Classes:", classes)
     print("Imports:", imports)
+    print("Variables:", variables)
 
 
 def calculate_metrics(tree):
@@ -55,7 +62,7 @@ def calculate_metrics(tree):
     with open("sample.py", "r") as file:
         total_lines = len(file.readlines())
 
-    print("\nCode Metrics:")
+    print("code Metrics:")
     print("Functions:", functions)
     print("Classes:", classes)
     print("Imports:", imports)
