@@ -51,6 +51,7 @@ def calculate_metrics(tree):
     functions = 0
     classes = 0
     imports = 0
+    variables = 0
 
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
@@ -65,13 +66,17 @@ def calculate_metrics(tree):
         elif isinstance(node, ast.ImportFrom):
             imports += 1
 
+        elif isinstance(node, ast.Assign):
+            variables += 1
+
     with open("sample.py", "r") as file:
         total_lines = len(file.readlines())
 
-    print("\nCode Metrics:")
+    print("Code Metrics:")
     print("Functions:", functions)
     print("Classes:", classes)
     print("Imports:", imports)
+    print("Variables:", variables)
     print("Total Lines:", total_lines)
 
 
