@@ -14,7 +14,8 @@ def extract_details(tree):
     function_args = {}
     classes = []
     imports = []
-    variables = []
+    variables = [] 
+    variable_lines = {}
 
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
@@ -34,17 +35,20 @@ def extract_details(tree):
         elif isinstance(node, ast.ImportFrom):
             if node.module:
                 imports.append(node.module)
+            elif isinstance(node, ast.Assign):
+             for target in node.targets:
+              if isinstance(target, ast.Name):
+                variables.append(target.id)
+            variable_lines[target.id] = node.lineno
 
-        elif isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name):
-                    variables.append(target.id)
+        
 
     print("Functions:", functions)
     print("Classes:", classes)
     print("Imports:", imports)
     print("Variables:", variables)
     print("Function Arguments:", function_args)
+    print("Variable Line Numbers:", variable_lines)
 
 
 def calculate_metrics(tree):
