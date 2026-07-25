@@ -19,7 +19,11 @@ def create_database():
     conn.commit()
     conn.close()
     create_database()
-
+def trace_calls(frame, event, arg):
+    print(f"Line: {frame.f_lineno}")
+    return trace_calls
+sys.settrace(trace_calls)
+print("Tracer Started")
 
 def parse_python_file(file_path):
     with open(file_path, "r") as file:
