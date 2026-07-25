@@ -1,7 +1,24 @@
 import ast
 import sys
+import sqlite3
 
 print("AST Parser Running")
+def create_database():
+    conn = sqlite3.connect("pychronicle.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS variable_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        line_number INTEGER,
+        variable_name TEXT,
+        variable_value TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+    create_database()
 
 
 def parse_python_file(file_path):
