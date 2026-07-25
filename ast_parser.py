@@ -18,10 +18,15 @@ def create_database():
 
     conn.commit()
     conn.close()
-    create_database()
+    
 def trace_calls(frame, event, arg):
-    print(f"Line: {frame.f_lineno}")
+    if event == "line":
+        print(f"Executing Line: {frame.f_lineno}")
+        print(frame.f_locals)
     return trace_calls
+create_database()
+print("Tracer Started")
+
 sys.settrace(trace_calls)
 print("Tracer Started")
 
@@ -111,7 +116,9 @@ else:
     file_name = "sample.py"
 
 tree = parse_python_file(file_name)
+sys.settrace(trace_calls)
 
 extract_details(tree)
 
 calculate_metrics(tree)
+sys.settrace(None)
