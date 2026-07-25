@@ -1,4 +1,5 @@
 import ast
+import sys
 
 print("AST Parser Running")
 
@@ -83,8 +84,12 @@ def calculate_metrics(tree):
     print("Variables:", variables)
     print("Total Lines:", total_lines)
 
+if len(sys.argv) > 1:
+    file_name = sys.argv[1]
+else:
+    file_name = "sample.py"
 
-tree = parse_python_file("sample.py")
+tree = parse_python_file(file_name)
 
 extract_details(tree)
 
