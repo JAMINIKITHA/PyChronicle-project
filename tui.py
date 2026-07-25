@@ -9,9 +9,17 @@ class PyChronicleApp(App):
     def on_mount(self):
         conn = sqlite3.connect("pychronicle.db")
         cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM variable_history")
-        count = cursor.fetchone()[0]
-        print(f"Database records: {count}")
+
+        cursor.execute(
+            "SELECT line_number, variable_name, variable_value FROM variable_history LIMIT 10"
+        )
+
+        rows = cursor.fetchall()
+
+        print("\n=== Variable History ===")
+        for row in rows:
+            print(row)
+
         conn.close()
 
     def compose(self) -> ComposeResult:
@@ -20,12 +28,12 @@ class PyChronicleApp(App):
         with Horizontal():
             yield Static(
                 "📄 Code View\n\nPython code will appear here.",
-                id="code_view"
+                id="code_view",
             )
 
             yield Static(
-                "⏳ Timeline\n\nFrame: 0 / 0",
-                id="timeline"
+                "⏳ Timeline\n\nDatabase Connected",
+                id="timeline",
             )
 
         yield Footer()
