@@ -10,35 +10,45 @@ class PyChronicleApp(App):
     #code_view {
         width: 70%;
         border: solid green;
+        padding: 1;
     }
 
     #timeline {
         width: 30%;
         border: solid yellow;
+        padding: 1;
     }
     """
 
     def compose(self) -> ComposeResult:
 
+        # Load source code
+        try:
+            with open("sample.py", "r") as file:
+                code = file.readlines()
+        except FileNotFoundError:
+            code = ["sample.py not found"]
+
+        code_text = "📄 Source Code\n\n"
+
+        for i, line in enumerate(code, start=1):
+            code_text += f"{i:3} | {line}"
+
+        # Load database info
         conn = sqlite3.connect("pychronicle.db")
         cursor = conn.cursor()
 
-        cursor.execute("""
-            SELECT line_number, variable_name, variable_value
-            FROM variable_history
-            ORDER BY id DESC
-            LIMIT 15
-        """)
+        cursor.execute("SELECT COUNT(*) FROM variable_history")
+        total_frames = cursor.fetchone()[0]
 
-        rows = cursor.fetchall()
         conn.close()
 
-        code_text = "📄 Recent Execution\n\n"
-
-        for line, var, value in rows:
-            code_text += f"Line {line}: {var} = {value}\n"
-
-        timeline_text = f"⏳ Timeline\n\nFrames Loaded: {len(rows)}"
+        timeline_text = (
+            "⏳ Timeline\n\n"
+            f"Total Frames : {total_frames}\n\n"
+            "Current Frame : 1\n\n"
+            "Status : Ready"
+        )
 
         yield Header()
 
