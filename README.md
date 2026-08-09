@@ -1,4 +1,4 @@
-# PyChronicle
+13# PyChronicle
 
 ## AST-Powered Time-Travel Debugger
 
@@ -16,3 +16,7 @@ PyChronicle is a Python debugging tool that analyzes code structure, records exe
 - Trace report export (CSV)
 
 ## Project Structure
+## How to Run 
+### 1. Install Dependicies
+'''bash 
+pip install -r requirements.txt
